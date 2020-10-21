@@ -80,6 +80,7 @@ type DockerServerCredentials struct {
 type testXML struct {
 	UP     xml.Name `xml:"com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"`
 	String xml.Name `xml:"org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl"`
+	Text   string   `xml:",chardata"`
 }
 
 //KeySourceDirectEntryType is used when secret in provided directly as private key value
@@ -140,6 +141,7 @@ func (cm CredentialsManager) GetSingleType(domain string, id string) error {
 	_ = xml.Unmarshal([]byte(str), &creds)
 	fmt.Println(creds.UP)
 	fmt.Println(creds.String)
+	fmt.Println(creds.Text)
 	return nil
 }
 
