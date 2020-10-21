@@ -77,6 +77,11 @@ type DockerServerCredentials struct {
 	ServerCaCertificate string   `xml:"serverCaCertificate"`
 }
 
+type testXML struct {
+	UP     xml.Name `xml:"com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"`
+	String xml.Name `xml:"org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl"`
+}
+
 //KeySourceDirectEntryType is used when secret in provided directly as private key value
 const KeySourceDirectEntryType = "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey$DirectEntryPrivateKeySource"
 
@@ -121,6 +126,21 @@ func (cm CredentialsManager) List(domain string) ([]string, error) {
 	}
 
 	return ids, nil
+}
+
+func (cm CredentialsManager) GetSingleType(domain string, id string) error {
+	str := ""
+	err := cm.handleResponse(cm.J.Requester.Get(cm.fillURL(configCredentialURL, domain, id), &str, map[string]string{}))
+	if err != nil {
+		return err
+	}
+
+	creds := new(testXML)
+
+	_ = xml.Unmarshal([]byte(str), &creds)
+	fmt.Println(creds.UP)
+	fmt.Println(creds.String)
+	return nil
 }
 
 //GetSingle searches for credential in given domain with given id, if credential is found
