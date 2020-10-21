@@ -139,8 +139,11 @@ func (cm CredentialsManager) GetSingleType(domain string, id string) error {
 	creds := new(testXML)
 
 	_ = xml.Unmarshal([]byte(str), &creds)
+	fmt.Println("up")
 	fmt.Println(creds.UP)
+	fmt.Println("string")
 	fmt.Println(creds.String)
+	fmt.Println("text")
 	fmt.Println(creds.Text)
 	return nil
 }
